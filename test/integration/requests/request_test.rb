@@ -228,8 +228,8 @@ class RequestTest < ActionDispatch::IntegrationTest
   def test_patch_update_relationship_to_many_acts_as_set
     # Comments are acts_as_set=false so PUT/PATCH should respond with 403
 
-    rogue = Comment.find_by(body: 'Rogue Comment Here')
-    patch '/posts/5/relationships/comments', { 'data' => [{type: 'comments', id: rogue.id.to_s }]}.to_json, "CONTENT_TYPE" => JSONAPI::MEDIA_TYPE
+    rogue = Comment.find_by_body('Rogue Comment Here')
+    patch '/posts/5/links/comments', { 'data' => [{type: 'comments', id: rogue.id.to_s }]}.to_json, "CONTENT_TYPE" => JSONAPI::MEDIA_TYPE
 
     assert_equal 403, status
   end
@@ -244,8 +244,8 @@ class RequestTest < ActionDispatch::IntegrationTest
   def test_put_update_relationship_to_many_acts_as_set
     # Comments are acts_as_set=false so PUT/PATCH should respond with 403. Note: JR currently treats PUT and PATCH as equivalent
 
-    rogue = Comment.find_by(body: 'Rogue Comment Here')
-    put '/posts/5/relationships/comments', { 'data' => [{type: 'comments', id: rogue.id.to_s }]}.to_json, "CONTENT_TYPE" => JSONAPI::MEDIA_TYPE
+    rogue = Comment.find_by_body('Rogue Comment Here')
+    put '/posts/5/links/comments', { 'data' => [{type: 'comments', id: rogue.id.to_s }]}.to_json, "CONTENT_TYPE" => JSONAPI::MEDIA_TYPE
 
     assert_equal 403, status
   end
@@ -691,4 +691,26 @@ class RequestTest < ActionDispatch::IntegrationTest
     assert_equal 204, status
   end
 
+  # def rails_3_hash
+  #   {}
+  # end
+
+  if Rails::VERSION::MAJOR < 4
+    # def rails_3_hash
+    #   { "param" => :id }
+    # end
+
+    def patch(url, args={})
+      post url, args.merge({method: :patch})
+    end
+
+    def delete(url, args={})
+      post url, args.merge({method: :delete})
+    end
+
+    def put(url, args={})
+      post url, args.merge({method: :put})
+    end
+  end
 end
+

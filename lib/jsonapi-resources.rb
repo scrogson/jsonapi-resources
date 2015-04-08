@@ -21,3 +21,8 @@ require 'jsonapi/operation_result'
 require 'jsonapi/operation_results'
 require 'jsonapi/callbacks'
 require 'jsonapi/link_builder'
+
+if Rails::VERSION::MAJOR < 4
+  require 'jsonapi/rails-3.2/polyfill'
+end
+

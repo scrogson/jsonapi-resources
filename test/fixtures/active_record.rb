@@ -1,9 +1,16 @@
 require 'active_record'
 require 'jsonapi-resources'
 
-ActiveSupport::Inflector.inflections(:en) do |inflect|
-  inflect.uncountable 'preferences'
-  inflect.irregular 'numero_telefone', 'numeros_telefone'
+if Rails::VERSION::MAJOR >= 4
+  ActiveSupport::Inflector.inflections(:en) do |inflect|
+    inflect.uncountable 'preferences'
+    inflect.irregular 'numero_telefone', 'numeros_telefone'
+  end
+else
+  ActiveSupport::Inflector.inflections do |inflect|
+    inflect.uncountable 'preferences'
+    inflect.irregular 'numero_telefone', 'numeros_telefone'
+  end
 end
 
 ### DATABASE
@@ -208,7 +215,7 @@ end
 class Person < ActiveRecord::Base
   has_many :posts, foreign_key: 'author_id'
   has_many :comments, foreign_key: 'author_id'
-  has_many :expense_entries, foreign_key: 'employee_id', dependent: :restrict_with_exception
+  has_many :expense_entries, foreign_key: 'employee_id', dependent: (Rails::VERSION::MAJOR < 4 ? :restrict : :restrict_with_exception)
   has_many :vehicles
   belongs_to :preferences
   belongs_to :hair_cut
@@ -1232,10 +1239,4 @@ betax = Planet.create(name: 'Beta X', description: 'Newly discovered Planet X', 
 betay = Planet.create(name: 'Beta X', description: 'Newly discovered Planet Y', planet_type_id: unknown.id)
 betaz = Planet.create(name: 'Beta X', description: 'Newly discovered Planet Z', planet_type_id: unknown.id)
 betaw = Planet.create(name: 'Beta W', description: 'Newly discovered Planet W')
-Category.create(name: 'Category A', status: 'active')
-Category.create(name: 'Category B', status: 'active')
-Category.create(name: 'Category C', status: 'active')
-Category.create(name: 'Category D', status: 'inactive')
-Category.create(name: 'Category E', status: 'inactive')
-Category.create(name: 'Category F', status: 'inactive')
-Category.create(name: 'Category G', status: 'inactive')
+

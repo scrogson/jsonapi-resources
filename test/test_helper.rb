@@ -13,6 +13,11 @@ end
 require 'rails/all'
 require 'rails/test_help'
 require 'minitest/mock'
+if Rails::VERSION::MAJOR < 4
+  require 'jsonapi/rails-3.2/polyfill'
+  require 'minitest/autorun'
+  require 'minitest/spec'
+end
 require 'jsonapi-resources'
 require 'pry'
 
