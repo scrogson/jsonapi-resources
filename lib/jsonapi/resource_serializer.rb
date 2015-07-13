@@ -21,8 +21,10 @@ module JSONAPI
       @include_directives = options[:include_directives]
       @key_formatter      = options.fetch(:key_formatter, JSONAPI.configuration.key_formatter)
       @url_generator      = generate_link_builder(primary_resource_klass, options)
-      @force_has_one_resource_linkage = options.fetch(:force_has_one_resource_linkage, JSONAPI.configuration.force_has_one_resource_linkage)
-      @force_has_many_resource_linkage = options.fetch(:force_has_many_resource_linkage, JSONAPI.configuration.force_has_many_resource_linkage)
+      @always_include_has_one_linkage_data = options.fetch(:always_include_has_one_linkage_data,
+                                                           JSONAPI.configuration.always_include_has_one_linkage_data)
+      @always_include_has_many_linkage_data = options.fetch(:always_include_has_many_linkage_data,
+                                                            JSONAPI.configuration.always_include_has_many_linkage_data)
     end
 
     # Converts a single resource, or an array of resources to a hash, conforming to the JSONAPI structure
@@ -236,7 +238,7 @@ module JSONAPI
     end
 
     def link_object_has_one(source, association, include_linkage)
-      include_linkage = include_linkage | @force_has_one_resource_linkage | association.force_resource_linkage
+      include_linkage = include_linkage | @always_include_has_one_linkage_data | association.always_include_linkage_data
       link_object_hash = {}
       link_object_hash[:links] = {}
       link_object_hash[:links][:self] = self_link(source, association)

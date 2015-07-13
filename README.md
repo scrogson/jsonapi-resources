@@ -1251,8 +1251,8 @@ JSONAPI.configure do |config|
   
   # Resource Linkage
   # Controls the serialization of resource linkage for non compound documents
-  # NOTE: force_has_many_resource_linkage is not currently implemented
-  config.force_has_one_resource_linkage = false  
+  # NOTE: always_include_has_many_linkage_data is not currently implemented
+  config.always_include_has_one_linkage_data = false  
 end
 ```
 

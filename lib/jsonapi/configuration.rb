@@ -18,8 +18,8 @@ module JSONAPI
                 :top_level_meta_include_record_count,
                 :top_level_meta_record_count_key,
                 :exception_class_whitelist,
-                :force_has_one_resource_linkage,
-                :force_has_many_resource_linkage
+                :always_include_has_one_linkage_data,
+                :always_include_has_many_linkage_data
 
     def initialize
       #:underscored_key, :camelized_key, :dasherized_key, or custom
@@ -59,9 +59,9 @@ module JSONAPI
 
       # Resource Linkage
       # Controls the serialization of resource linkage for non compound documents
-      # NOTE: force_has_many_resource_linkage is not currently implemented
-      self.force_has_one_resource_linkage = false
-      self.force_has_many_resource_linkage = false
+      # NOTE: always_include_has_many_linkage_data is not currently implemented
+      self.always_include_has_one_linkage_data = false
+      self.always_include_has_many_linkage_data = false
     end
 
     def json_key_format=(format)
@@ -97,9 +97,9 @@ module JSONAPI
 
     attr_writer :exception_class_whitelist
 
-    attr_writer :force_has_one_resource_linkage
+    attr_writer :always_include_has_one_linkage_data
 
-    attr_writer :force_has_many_resource_linkage
+    attr_writer :always_include_has_many_linkage_data
   end
 
   class << self

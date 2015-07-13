@@ -11,11 +11,11 @@ class SerializerTest < ActionDispatch::IntegrationTest
 
     JSONAPI.configuration.json_key_format = :camelized_key
     JSONAPI.configuration.route_format = :camelized_route
-    JSONAPI.configuration.force_has_one_resource_linkage = false
+    JSONAPI.configuration.always_include_has_one_linkage_data = false
   end
 
   def after_teardown
-    JSONAPI.configuration.force_has_one_resource_linkage = false
+    JSONAPI.configuration.always_include_has_one_linkage_data = false
     JSONAPI.configuration.json_key_format = :underscored_key
   end
 
@@ -652,14 +652,14 @@ class SerializerTest < ActionDispatch::IntegrationTest
     )
   end
 
-  def test_serializer_array_of_resources_force_has_one_relationship_data
+  def test_serializer_array_of_resources_always_include_has_one_linkage_data
 
     posts = []
     Post.find(1, 2).each do |post|
       posts.push PostResource.new(post)
     end
 
-    JSONAPI.configuration.force_has_one_resource_linkage = true
+    JSONAPI.configuration.always_include_has_one_linkage_data = true
 
     assert_hash_equals(
       {
@@ -964,7 +964,7 @@ class SerializerTest < ActionDispatch::IntegrationTest
       JSONAPI::ResourceSerializer.new(PostResource,
                                       include: ['comments', 'comments.tags']).serialize_to_hash(posts)
     )
-    JSONAPI.configuration.force_has_one_resource_linkage = false
+    JSONAPI.configuration.always_include_has_one_linkage_data = false
   end
 
   def test_serializer_array_of_resources
